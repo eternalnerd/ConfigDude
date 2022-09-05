@@ -105,4 +105,20 @@ class Parser
     {
         return $this->sections;
     }
+
+    public function renderHTML() :string|bool
+    {
+        $outputHTML = '';
+        foreach($this->getSections() as $section)
+        {
+            $outputHTML .= $section->renderHTMLStart();
+            foreach($section->getChildren() as $child)
+            {
+                $outputHTML .= $child->renderHTML();
+                //echo "\t",($child->getDefault()) ? $child->getDefault() : "No default value","",PHP_EOL;
+            }
+            $outputHTML .= $section->renderHTMLEnd();
+        }
+        return (!empty($outputHTML))? $outputHTML : false ;
+    }
 }
