@@ -82,6 +82,16 @@ class Token
     {
         $html = match($this->type)
         {
+            'bool'      => sprintf('<fieldset>%s<label class="%s" for="%s">%s%s<input type="checkbox" class="%s" name="%s" %s/>%s</label>%s</fieldset>%s',
+                                        PHP_EOL,
+                                        (is_array($labelClasses)) ? implode(" ", $labelClasses) : $labelClasses, 
+                                        $this->name,
+                                        $this->prettyName,
+                                        PHP_EOL,
+                                        (is_array($inputClasses)) ? implode(" ", $inputClasses) : $inputClasses,
+                                        $this->name,
+                                        $this->defaultValue,
+                                        PHP_EOL,PHP_EOL,PHP_EOL),
             'textArea'  => sprintf('<label class="%s" for="%s">%s%s<textarea class="%s" name="%s">%s</textarea>%s</label>%s',
                                         (is_array($labelClasses)) ? implode(" ", $labelClasses) : $labelClasses, 
                                         $this->name,

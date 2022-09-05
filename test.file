@@ -5,6 +5,7 @@ someint={{someInt|int}}
 someip={{someIp|ipAddress}}
 somemac={{someMac|macAddress}}
 somemacagain={{someMac}}
+somebool={{A True or False|bool|default=checked}}
 {{#/A Section#}}
 
 [random thing]
