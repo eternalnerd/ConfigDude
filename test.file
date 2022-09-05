@@ -25,5 +25,5 @@ set interfaces {{juniperInterfaceName1}} unit {{unit1}} family {{interfaceFamily
 nosection={{foo|string}}
 
 {{#configSection#}}
-MOTD: {{textArea1|textArea|max(255)}}
+MOTD: {{textArea1|textArea|max(255)|default="This is the message of the day!"}}
 {{#/configSection#}}

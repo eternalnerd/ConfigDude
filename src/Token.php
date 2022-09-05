@@ -78,14 +78,25 @@ class Token
         return (!empty($this->type)) ? $this->type : false ;
     }
 
-    public function renderHTML() :string
+    public function renderHTML(string|array $labelClasses, string|array $inputClasses) :string
     {
         $html = match($this->type)
         {
-            default  => sprintf('<label for="%s">%s%s<input type="text" name="%s" value="%s" />%s</label>%s',
+            'textArea'  => sprintf('<label class="%s" for="%s">%s%s<textarea class="%s" name="%s">%s</textarea>%s</label>%s',
+                                        (is_array($labelClasses)) ? implode(" ", $labelClasses) : $labelClasses, 
                                         $this->name,
                                         $this->prettyName,
                                         PHP_EOL,
+                                        (is_array($inputClasses)) ? implode(" ", $inputClasses) : $inputClasses,
+                                        $this->name,
+                                        $this->defaultValue,
+                                        PHP_EOL,PHP_EOL),
+            default     => sprintf('<label class="%s" for="%s">%s%s<input class="%s" type="text" name="%s" value="%s" />%s</label>%s',
+                                        (is_array($labelClasses)) ? implode(" ", $labelClasses) : $labelClasses,
+                                        $this->name,
+                                        $this->prettyName,
+                                        PHP_EOL,
+                                        (is_array($inputClasses)) ? implode(" ", $inputClasses) : $inputClasses,
                                         $this->name,
                                         $this->defaultValue,
                                         PHP_EOL,PHP_EOL),

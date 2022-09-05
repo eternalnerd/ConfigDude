@@ -4,9 +4,9 @@ require_once('vendor/autoload.php');
 
 use EternalNerd\ConfigDude\Parser;
 
-$file = "config.file";
+$file = "test.file";
 
 $parser = new Parser($file);
 
-echo $parser->renderHTML();
+echo $parser->renderHTML(['testClass'], ['testLabelClass'], ['testInputClass']);
 

@@ -106,15 +106,15 @@ class Parser
         return $this->sections;
     }
 
-    public function renderHTML() :string|bool
+    public function renderHTML(string|array $sectionClasses, string|array $labelClasses, string|array $inputClasses ) :string|bool
     {
         $outputHTML = '';
         foreach($this->getSections() as $section)
         {
-            $outputHTML .= $section->renderHTMLStart();
+            $outputHTML .= $section->renderHTMLStart($sectionClasses);
             foreach($section->getChildren() as $child)
             {
-                $outputHTML .= $child->renderHTML();
+                $outputHTML .= $child->renderHTML($labelClasses, $inputClasses);
                 //echo "\t",($child->getDefault()) ? $child->getDefault() : "No default value","",PHP_EOL;
             }
             $outputHTML .= $section->renderHTMLEnd();

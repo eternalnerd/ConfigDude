@@ -90,16 +90,21 @@ class Section
         return "</section>".PHP_EOL;
     }
 
-    public function renderHTMLStart() :string
+    public function renderHTMLStart(array|string $sectionClasses) :string
     {
         if(strpos($this->name,"anonymous") !== false)
         {
-            $html = "<section>".PHP_EOL;
+            $html = sprintf('<section class="%s">%s',
+                        (is_array(($sectionClasses)) ? implode(" ", $sectionClasses): $sectionClasses),
+                        PHP_EOL);
         }
         else
         {
-            $html = "<section>".PHP_EOL.
-                    "<h3>".$this->prettyName."</h3>".PHP_EOL;
+            $html = sprintf('<section class="%s">%s<h3>%s</h3>%s',
+                        (is_array(($sectionClasses)) ? implode(" ", $sectionClasses): $sectionClasses),
+                        PHP_EOL,
+                        $this->prettyName,
+                        PHP_EOL);
         }
         return($html);
     }
