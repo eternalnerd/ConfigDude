@@ -11,15 +11,14 @@ class Section
     private $prettyName;
     private $repeatable = false;
     private $twig;
+    private $twigLoader;
 
     public function __construct(array $array)
     {
         $this->prettyName = array_shift($array);
         $this->name = Helper::toCamelCase($this->prettyName);
-        $liveDir = '../../vendor/eternalnerd/config-dude/templates';
-        $devDir  = 'templates';
-        $loader = new \Twig\Loader\FilesystemLoader((is_dir($liveDir) ? $liveDir : $devDir));
-        $this->twig = new \Twig\Environment($loader, [
+        $this->twigLoader = new \Twig\Loader\FilesystemLoader('templates');
+        $this->twig = new \Twig\Environment($this->twigLoader, [
             'cache' => 'templates/cache',
         ]);
 
@@ -112,5 +111,10 @@ class Section
             $out[$key] = $val;
         }
         return $out;
+    }
+
+    function twigAddPath($path)
+    {
+        return $this->twigLoader->addPath($path);
     }
 }

@@ -13,14 +13,14 @@ class Token
     private $prettyName;
     private $type;
     private $twig;
+    private $twigLoader;
 
     public function __construct(array $array)
     {
         $this->prettyName = array_shift($array);
         $this->name = Helper::toCamelCase($this->prettyName);
-        $liveDir = '../../vendor/eternalnerd/config-dude/templates';
-        $devDir  = 'templates';
-        $loader = new \Twig\Loader\FilesystemLoader((is_dir($liveDir) ? $liveDir : $devDir));
+        
+        $loader = new \Twig\Loader\FilesystemLoader('templates');
         $this->twig = new \Twig\Environment($loader, [
             'cache' => 'templates/cache',
         ]);
@@ -108,5 +108,10 @@ class Token
             $out[$key] = $val;
         }
         return $out;
+    }
+
+    function twigAddPath($path)
+    {
+        return $this->twigLoader->addPath($path);
     }
 }
