@@ -87,7 +87,7 @@ class Section
 
     public function renderHTMLEnd() :string
     {
-        $loader = new \Twig\Loader\FilesystemLoader('templates');
+        $loader = new \Twig\Loader\FilesystemLoader(['templates','../vendor/eternalnerd/config-dude/templates']);
         $twig = new \Twig\Environment($loader, [
             'cache' => 'templates/cache',
         ]);
