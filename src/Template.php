@@ -57,7 +57,7 @@ class Template
         return <<<EOF
         <label for="{{vars.name}}">{{vars.prettyName}} - Min: {{vars.min}} | Max: {{vars.max}}
             <input type="range" name="{{vars.name}}" id="{{vars.name}}" value="{{vars.defaultValue}}" min="{{vars.min}}" max="{{vars.max}}" oninput="{{vars.name}}Num.value = this.value">
-            <output name="{{vars.name}}Num">{{vars.defaultValue}}</output>
+            <output id="{{vars.name}}Num">{{vars.defaultValue}}</output>
         </label>        
         EOF.PHP_EOL;
     }
