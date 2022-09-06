@@ -32,17 +32,6 @@ class Template
         </label>
         EOF.PHP_EOL;
     }    
-
-    static function textArea() :string
-    {
-        return <<<EOF
-        <label for="{{vars.name}}">
-            <textarea name="{{vars.name}}" id="{{vars.name}}">
-                {{vars.defaultValue}}
-            </textarea>
-        </label>
-        EOF.PHP_EOL;
-    }
     
     static function sectoinEnd() :string
     {
@@ -60,6 +49,17 @@ class Template
         <section>
             <h3>{{vars.prettyName}}</h3>
         {% endif %}
+        EOF.PHP_EOL;
+    }
+
+    static function textArea() :string
+    {
+        return <<<EOF
+        <label for="{{vars.name}}">
+            <textarea name="{{vars.name}}" id="{{vars.name}}">
+                {{vars.defaultValue}}
+            </textarea>
+        </label>
         EOF.PHP_EOL;
     }
 }
