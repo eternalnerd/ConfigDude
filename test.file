@@ -6,6 +6,7 @@ someip={{someIp|ipAddress}}
 somemac={{someMac|macAddress}}
 somemacagain={{someMac}}
 somebool={{A True or False|bool|default=checked}}
+rangeValue={{Day Length|range|min(1)|max(24)|default=24}}
 {{#/A Section#}}
 
 [random thing]
