@@ -117,7 +117,10 @@ class Token
 
         return $this->twig->render($template,[ 
             'vars' => $this->toArray(),
-            'classes' => [$labelClasses, $inputClasses],
+            'classes' => [
+                'labelClasses' => $labelClasses, 
+                'inputClasses' => $inputClasses
+            ],
             'validation' => $this->getValidationType()
         ]);
     }

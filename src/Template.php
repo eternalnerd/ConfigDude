@@ -13,8 +13,8 @@ class Template
     {
         return <<<EOF
         <fieldset>
-            <label for="{{vars.name}}">
-                <input type="checkbox" name="{{vars.name}}" id="{{vars.name}}" {% if vars.defaultValue == "checked" %}checked{% endif %}>
+            <label {% if classes.labelClasses %}class="{%for item in classes.labelClasses %}{{item}} {%endfor%}"{%endif%} for="{{vars.name}}">
+                <input {% if classes.inputClasses %}class="{%for item in classes.inputClasses %}{{item}} {%endfor%}"{%endif%} type="checkbox" name="{{vars.name}}" id="{{vars.name}}" {% if vars.defaultValue == "checked" %}checked{% endif %}>
             </label>
         </fieldset>
         EOF.PHP_EOL;
@@ -28,8 +28,8 @@ class Template
     static function inputInteger() :string
     {
         return <<<EOF
-        <label for="{{vars.name}}">{{vars.prettyName}}
-            <input type="text" name="{{vars.name}}" id="{{vars.name}}" value="{{vars.defaultValue}}" min="{{vars.min}}" max="{{vars.max}}">
+        <label {% if classes.labelClasses %}class="{%for item in classes.labelClasses %}{{item}} {%endfor%}"{%endif%} for="{{vars.name}}">{{vars.prettyName}}
+            <input {% if classes.inputClasses %}class="{%for item in classes.inputClasses %}{{item}} {%endfor%}"{%endif%} type="text" name="{{vars.name}}" id="{{vars.name}}" value="{{vars.defaultValue}}" min="{{vars.min}}" max="{{vars.max}}">
         </label>
         EOF.PHP_EOL;
     }
@@ -42,8 +42,8 @@ class Template
     static function inputString() :string
     {
         return <<<EOF
-        <label for="{{vars.name}}">{{vars.prettyName}}
-            <input type="text" name="{{vars.name}}" id="{{vars.name}}" value="{{vars.defaultValue}}" minLength="{{vars.min}}" maxLength="{{vars.max}}" {% if validation %}pattern="{{validation}}"{% endif %}>
+        <label {% if classes.labelClasses %}class="{%for item in classes.labelClasses %}{{item}} {%endfor%}"{%endif%} for="{{vars.name}}">{{vars.prettyName}}
+            <input {% if classes.inputClasses %}class="{%for item in classes.inputClasses %}{{item}} {%endfor%}"{%endif%} type="text" name="{{vars.name}}" id="{{vars.name}}" value="{{vars.defaultValue}}" minLength="{{vars.min}}" maxLength="{{vars.max}}" {% if validation %}pattern="{{validation}}"{% endif %}>
         </label>
         EOF.PHP_EOL;
     }
@@ -56,8 +56,8 @@ class Template
     static function range() :string
     {
         return <<<EOF
-        <label for="{{vars.name}}">{{vars.prettyName}} - Min: {{vars.min}} | Max: {{vars.max}}
-            <input type="range" name="{{vars.name}}" id="{{vars.name}}" value="{{vars.defaultValue}}" min="{{vars.min}}" max="{{vars.max}}" oninput="{{vars.name}}Num.value = this.value">
+        <label {% if classes.labelClasses %}class="{%for item in classes.labelClasses %}{{item}} {%endfor%}"{%endif%} for="{{vars.name}}">{{vars.prettyName}} - Min: {{vars.min}} | Max: {{vars.max}}
+            <input {% if classes.inputClasses %}class="{%for item in classes.inputClasses %}{{item}} {%endfor%}"{%endif%} type="range" name="{{vars.name}}" id="{{vars.name}}" value="{{vars.defaultValue}}" min="{{vars.min}}" max="{{vars.max}}" oninput="{{vars.name}}Num.value = this.value">
             <output id="{{vars.name}}Num">{{vars.defaultValue}}</output>
         </label>        
         EOF.PHP_EOL;
@@ -84,9 +84,9 @@ class Template
     {
         return <<<EOF
         {% if 'anonymous' in vars.prettyName %}
-        <section>
+        <section {% if classes %}class="{%for item in classes %}{{item}} {%endfor%}"{%endif%}>
         {% else %}
-        <section>
+        <section {% if classes %}class="{%for item in classes %}{{item}} {%endfor%}"{%endif%}>
             <h3>{{vars.prettyName}}</h3>
         {% endif %}
         EOF.PHP_EOL;
@@ -100,8 +100,8 @@ class Template
     static function textArea() :string
     {
         return <<<EOF
-        <label for="{{vars.name}}">
-            <textarea name="{{vars.name}}" id="{{vars.name}}">
+        <label {% if classes.labelClasses %}class="{%for item in classes.labelClasses %}{{item}} {%endfor%}"{%endif%} for="{{vars.name}}">
+            <textarea {% if classes.inputClasses %}class="{%for item in classes.inputClasses %}{{item}} {%endfor%}"{%endif%} name="{{vars.name}}" id="{{vars.name}}">
                 {{vars.defaultValue}}
             </textarea>
         </label>
