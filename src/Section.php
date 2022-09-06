@@ -16,8 +16,9 @@ class Section
     {
         $this->prettyName = array_shift($array);
         $this->name = Helper::toCamelCase($this->prettyName);
-        
-        $loader = new \Twig\Loader\FilesystemLoader(['templates','../../vendor/eternalnerd/config-dude/templates']);
+        $liveDir = '../../vendor/eternalnerd/config-dude/templates';
+        $devDir  = 'templates';
+        $loader = new \Twig\Loader\FilesystemLoader((is_dir($liveDir) ? $liveDir : $devDir));
         $this->twig = new \Twig\Environment($loader, [
             'cache' => 'templates/cache',
         ]);
