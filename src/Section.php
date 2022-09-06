@@ -11,15 +11,18 @@ class Section
     private $prettyName;
     private $repeatable = false;
     private $twig;
-    private $twigLoader;
+    
 
     public function __construct(array $array)
     {
         $this->prettyName = array_shift($array);
         $this->name = Helper::toCamelCase($this->prettyName);
-        $this->twigLoader = new \Twig\Loader\FilesystemLoader('templates');
-        $this->twig = new \Twig\Environment($this->twigLoader, [
-            'cache' => 'templates/cache',
+        $loader = new \Twig\Loader\ArrayLoader([
+            'sectionStart'  => Template::sectionStart(),
+            'sectionEnd'    => Template::sectoinEnd()
+        ]);
+        $this->twig = new \Twig\Environment($loader, [
+            'cache' => false,
         ]);
 
         foreach($array as $item)
@@ -93,12 +96,12 @@ class Section
 
     public function renderHTMLEnd() :string
     {
-        return (!empty($this->children)) ? $this->twig->render('sectionEnd.html') : '' ;
+        return (!empty($this->children)) ? $this->twig->render('sectionEnd') : '' ;
     }
 
     public function renderHTMLStart(array $sectionClasses = []) :string
     {
-        return (!empty($this->children)) ? $this->twig->render('sectionStart.html', [
+        return (!empty($this->children)) ? $this->twig->render('sectionStart', [
             'vars' => $this->toArray(),
             'classes' => $sectionClasses
         ]) : '' ;
@@ -111,10 +114,5 @@ class Section
             $out[$key] = $val;
         }
         return $out;
-    }
-
-    function twigAddPath($path)
-    {
-        return $this->twigLoader->addPath($path);
     }
 }

@@ -13,16 +13,19 @@ class Token
     private $prettyName;
     private $type;
     private $twig;
-    private $twigLoader;
 
     public function __construct(array $array)
     {
         $this->prettyName = array_shift($array);
         $this->name = Helper::toCamelCase($this->prettyName);
-        
-        $loader = new \Twig\Loader\FilesystemLoader('templates');
+        $loader = new \Twig\Loader\ArrayLoader([
+            'checkBox' => Template::checkBox(),
+            'textArea' => Template::textArea(),
+            'inputString' => Template::inputString(),
+            'inputInteger' => Template::inputInteger()
+        ]);
         $this->twig = new \Twig\Environment($loader, [
-            'cache' => 'templates/cache',
+            'cache' => false,
         ]);
 
         if(count($array) < 1)
@@ -90,9 +93,10 @@ class Token
     {
         $template = match($this->type)
         {
-            'bool'      => 'checkBox.html',
-            'textArea'  => 'textArea.html',
-            default     => 'input.html'
+            'bool'      => 'checkBox',
+            'textArea'  => 'textArea',
+            'int'       => 'inputInteger',
+            default     => 'inputString'
         };
 
         return $this->twig->render($template,[ 
@@ -108,10 +112,5 @@ class Token
             $out[$key] = $val;
         }
         return $out;
-    }
-
-    function twigAddPath($path)
-    {
-        return $this->twigLoader->addPath($path);
     }
 }
