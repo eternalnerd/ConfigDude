@@ -13,11 +13,18 @@ class Token
     private $prettyName;
     private $type;
     private $twig;
+    private $validationPatterns;
     
     public function __construct(array $array)
     {
         $this->prettyName = array_shift($array);
         $this->name = Helper::toCamelCase($this->prettyName);
+
+        $this->validationPatterns = [
+            'ipAddress'                 => '/((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}/',
+            'macAddress'                => '/([0-9a-fA-F]{2}[:-]?){6}/',
+            'juniperInterfaceName'      => '/(irb|ae(12[0-8]|1[0-1][0-9]|[0-9][0-9]|[0-9])|[a-z]?[a-z][a-z]-[0-9](\/?([0-9][0-9]|[0-9]))(\/?([0-9][0-9]|[0-9])))/',
+        ];
 
         $loader = new \Twig\Loader\ArrayLoader([
             'range'    => Template::range(),
@@ -26,6 +33,7 @@ class Token
             'inputString' => Template::inputString(),
             'inputInteger' => Template::inputInteger()
         ]);
+
         $this->twig = new \Twig\Environment($loader, [
             'cache' => false,
         ]);
@@ -91,6 +99,11 @@ class Token
         return (!empty($this->type)) ? $this->type : false ;
     }
 
+    public function getValidationType() :string
+    {
+        return (isset($this->validationPatterns[$this->type])) ? $this->validationPatterns[$this->type] : '';
+    }
+
     public function renderHTML(array $labelClasses = [], array $inputClasses = []) :string
     {
         $template = match($this->type)
@@ -104,7 +117,8 @@ class Token
 
         return $this->twig->render($template,[ 
             'vars' => $this->toArray(),
-            'classes' => [$labelClasses, $inputClasses]
+            'classes' => [$labelClasses, $inputClasses],
+            'validation' => $this->getValidationType()
         ]);
     }
 

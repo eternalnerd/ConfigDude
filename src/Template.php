@@ -43,11 +43,11 @@ class Template
     {
         return <<<EOF
         <label for="{{vars.name}}">{{vars.prettyName}}
-            <input type="text" name="{{vars.name}}" id="{{vars.name}}" value="{{vars.defaultValue}}" minLength="{{vars.min}}" maxLength="{{vars.max}}">
+            <input type="text" name="{{vars.name}}" id="{{vars.name}}" value="{{vars.defaultValue}}" minLength="{{vars.min}}" maxLength="{{vars.max}}" {% if validation %}pattern="{{validation}}"{% endif %}>
         </label>
         EOF.PHP_EOL;
     }
-        
+
     /**
      * Returns HTML in Twig format to render a range selection with min/max values.
      * 
