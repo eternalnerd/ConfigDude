@@ -19,7 +19,7 @@ class Token
         $this->prettyName = array_shift($array);
         $this->name = Helper::toCamelCase($this->prettyName);
 
-        $loader = new \Twig\Loader\FilesystemLoader(['templates','../vendor/eternalnerd/config-dude/templates']);
+        $loader = new \Twig\Loader\FilesystemLoader(['templates','../../vendor/eternalnerd/config-dude/templates']);
         $this->twig = new \Twig\Environment($loader, [
             'cache' => 'templates/cache',
         ]);
