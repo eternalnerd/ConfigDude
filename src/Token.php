@@ -21,9 +21,9 @@ class Token
         $this->name = Helper::toCamelCase($this->prettyName);
 
         $this->validationPatterns = [
-            'ipAddress'                 => '/((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}/',
-            'macAddress'                => '/([0-9a-fA-F]{2}[:-]?){6}/',
-            'juniperInterfaceName'      => '/(irb|ae(12[0-8]|1[0-1][0-9]|[0-9][0-9]|[0-9])|[a-z]?[a-z][a-z]-[0-9](\/?([0-9][0-9]|[0-9]))(\/?([0-9][0-9]|[0-9])))/',
+            'ipAddress'                 => '((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}',
+            'macAddress'                => '([0-9a-fA-F]{2}[:-]?){6}',
+            'juniperInterfaceName'      => '(irb|ae(12[0-8]|1[0-1][0-9]|[0-9][0-9]|[0-9])|[a-z]?[a-z][a-z]-[0-9](\/?([0-9][0-9]|[0-9]))(\/?([0-9][0-9]|[0-9])))',
         ];
 
         $loader = new \Twig\Loader\ArrayLoader([
