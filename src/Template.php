@@ -4,6 +4,11 @@ namespace EternalNerd\ConfigDude;
 
 class Template
 {
+    /**
+     * Returns HTML in Twig format to render Boolean as a checkbox.
+     * 
+     * @return string 
+     */
     static function checkBox() :string
     {
         return <<<EOF
@@ -15,6 +20,11 @@ class Template
         EOF.PHP_EOL;
     }
 
+    /**
+     * Returns HTML in Twig format to render Integer as a text input with min/max length.
+     * 
+     * @return string 
+     */
     static function inputInteger() :string
     {
         return <<<EOF
@@ -24,6 +34,11 @@ class Template
         EOF.PHP_EOL;
     }
 
+    /**
+     * Returns HTML in Twig format to render String as a text input with min/max length.
+     * 
+     * @return string 
+     */
     static function inputString() :string
     {
         return <<<EOF
@@ -32,7 +47,25 @@ class Template
         </label>
         EOF.PHP_EOL;
     }    
-    
+    /**
+     * Returns HTML in Twig format to render a range selection with min/max values.
+     * 
+     * @return string
+     */
+    static function range() :string
+    {
+        return <<<EOF
+        <label for="{{vars.name}}">{{vars.prettyName}}
+            <input type="range" name="{{vars.name}}" id="{{vars.name}}" value="{{vars.defaultValue}}" min="{{vars.min}}" max="{{vars.max}}">
+        </label>        
+        EOF.PHP_EOL;
+    }
+
+    /**
+     * Returns HTML in Twig format to render an end of a section.
+     * 
+     * @return string 
+     */
     static function sectoinEnd() :string
     {
         return <<<EOF
@@ -40,6 +73,11 @@ class Template
         EOF.PHP_EOL;
     }
 
+    /**
+     * Returns HTML in Twig format to render the start of a section.
+     * Will not display <h3> if this is an anonymous section.
+     * @return string 
+     */    
     static function sectionStart() :string
     {
         return <<<EOF
@@ -52,6 +90,11 @@ class Template
         EOF.PHP_EOL;
     }
 
+    /**
+     * Returns HTML in Twig format to render a textArea.
+     * 
+     * @return string 
+     */    
     static function textArea() :string
     {
         return <<<EOF

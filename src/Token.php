@@ -13,12 +13,14 @@ class Token
     private $prettyName;
     private $type;
     private $twig;
-
+    
     public function __construct(array $array)
     {
         $this->prettyName = array_shift($array);
         $this->name = Helper::toCamelCase($this->prettyName);
+
         $loader = new \Twig\Loader\ArrayLoader([
+            'range'    => Template::range(),
             'checkBox' => Template::checkBox(),
             'textArea' => Template::textArea(),
             'inputString' => Template::inputString(),
@@ -93,6 +95,7 @@ class Token
     {
         $template = match($this->type)
         {
+            'range'     => 'range',
             'bool'      => 'checkBox',
             'textArea'  => 'textArea',
             'int'       => 'inputInteger',
