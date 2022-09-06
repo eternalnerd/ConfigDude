@@ -106,7 +106,7 @@ class Parser
         return $this->sections;
     }
 
-    public function renderHTML(string|array $sectionClasses = '', string|array $labelClasses = '' , string|array $inputClasses = '') :string|bool
+    public function renderHTML(array $sectionClasses = [], array $labelClasses = [] , array $inputClasses = []) :string|bool
     {
         $outputHTML = '';
         foreach($this->getSections() as $section)

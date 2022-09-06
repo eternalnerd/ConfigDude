@@ -78,39 +78,32 @@ class Token
         return (!empty($this->type)) ? $this->type : false ;
     }
 
-    public function renderHTML(string|array $labelClasses, string|array $inputClasses) :string
+    public function renderHTML(array $labelClasses = [], array $inputClasses = []) :string
     {
-        $html = match($this->type)
+        $loader = new \Twig\Loader\FilesystemLoader('templates');
+        $twig = new \Twig\Environment($loader, [
+            'cache' => 'templates/cache',
+        ]);
+
+        $template = match($this->type)
         {
-            'bool'      => sprintf('<fieldset>%s<label class="%s" for="%s">%s%s<input type="checkbox" class="%s" name="%s" %s/>%s</label>%s</fieldset>%s',
-                                        PHP_EOL,
-                                        (is_array($labelClasses)) ? implode(" ", $labelClasses) : $labelClasses, 
-                                        $this->name,
-                                        $this->prettyName,
-                                        PHP_EOL,
-                                        (is_array($inputClasses)) ? implode(" ", $inputClasses) : $inputClasses,
-                                        $this->name,
-                                        $this->defaultValue,
-                                        PHP_EOL,PHP_EOL,PHP_EOL),
-            'textArea'  => sprintf('<label class="%s" for="%s">%s%s<textarea class="%s" name="%s">%s</textarea>%s</label>%s',
-                                        (is_array($labelClasses)) ? implode(" ", $labelClasses) : $labelClasses, 
-                                        $this->name,
-                                        $this->prettyName,
-                                        PHP_EOL,
-                                        (is_array($inputClasses)) ? implode(" ", $inputClasses) : $inputClasses,
-                                        $this->name,
-                                        $this->defaultValue,
-                                        PHP_EOL,PHP_EOL),
-            default     => sprintf('<label class="%s" for="%s">%s%s<input class="%s" type="text" name="%s" value="%s" />%s</label>%s',
-                                        (is_array($labelClasses)) ? implode(" ", $labelClasses) : $labelClasses,
-                                        $this->name,
-                                        $this->prettyName,
-                                        PHP_EOL,
-                                        (is_array($inputClasses)) ? implode(" ", $inputClasses) : $inputClasses,
-                                        $this->name,
-                                        $this->defaultValue,
-                                        PHP_EOL,PHP_EOL),
+            'bool'      => 'checkBox.html',
+            'textArea'  => 'textArea.html',
+            default     => 'input.html'
         };
-        return $html;
+
+        return $twig->render($template,[ 
+            'vars' => $this->toArray(),
+            'classes' => [$labelClasses, $inputClasses]
+        ]);
+    }
+
+    public function toArray() :array
+    {
+        foreach($this as $key => $val)
+        {
+            $out[$key] = $val;
+        }
+        return $out;
     }
 }

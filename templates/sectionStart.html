@@ -1,0 +1,7 @@
+{% if 'anonymous' in vars.prettyName %}
+<section>
+{% else %}
+<section>
+    <h3>{{vars.prettyName}}</h3>
+{% endif %}
+{{vars.prettyName}}

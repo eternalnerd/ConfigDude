@@ -87,25 +87,33 @@ class Section
 
     public function renderHTMLEnd() :string
     {
-        return "</section>".PHP_EOL;
+        $loader = new \Twig\Loader\FilesystemLoader('templates');
+        $twig = new \Twig\Environment($loader, [
+            'cache' => 'templates/cache',
+        ]);
+
+        return (!empty($this->children)) ? $twig->render('sectionEnd.html') : '' ;
     }
 
-    public function renderHTMLStart(array|string $sectionClasses) :string
+    public function renderHTMLStart(array $sectionClasses = []) :string
     {
-        if(strpos($this->name,"anonymous") !== false)
+        $loader = new \Twig\Loader\FilesystemLoader('templates');
+        $twig = new \Twig\Environment($loader, [
+            'cache' => 'templates/cache',
+        ]);
+        
+        return (!empty($this->children)) ? $twig->render('sectionStart.html', [
+            'vars' => $this->toArray(),
+            'classes' => $sectionClasses
+        ]) : '' ;
+    }
+
+    function toArray() :array
+    {
+        foreach($this as $key => $val)
         {
-            $html = sprintf('<section class="%s">%s',
-                        (is_array(($sectionClasses)) ? implode(" ", $sectionClasses): $sectionClasses),
-                        PHP_EOL);
+            $out[$key] = $val;
         }
-        else
-        {
-            $html = sprintf('<section class="%s">%s<h3>%s</h3>%s',
-                        (is_array(($sectionClasses)) ? implode(" ", $sectionClasses): $sectionClasses),
-                        PHP_EOL,
-                        $this->prettyName,
-                        PHP_EOL);
-        }
-        return($html);
+        return $out;
     }
 }
