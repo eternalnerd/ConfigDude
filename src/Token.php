@@ -12,11 +12,18 @@ class Token
     private $name;
     private $prettyName;
     private $type;
+    private $twig;
 
     public function __construct(array $array)
     {
         $this->prettyName = array_shift($array);
         $this->name = Helper::toCamelCase($this->prettyName);
+
+        $loader = new \Twig\Loader\FilesystemLoader(['templates','../vendor/eternalnerd/config-dude/templates']);
+        $this->twig = new \Twig\Environment($loader, [
+            'cache' => 'templates/cache',
+        ]);
+
         if(count($array) < 1)
         {
             $this->type = 'string';
@@ -80,11 +87,6 @@ class Token
 
     public function renderHTML(array $labelClasses = [], array $inputClasses = []) :string
     {
-        $loader = new \Twig\Loader\FilesystemLoader(['templates','../vendor/eternalnerd/config-dude/templates']);
-        $twig = new \Twig\Environment($loader, [
-            'cache' => 'templates/cache',
-        ]);
-
         $template = match($this->type)
         {
             'bool'      => 'checkBox.html',
@@ -92,7 +94,7 @@ class Token
             default     => 'input.html'
         };
 
-        return $twig->render($template,[ 
+        return $this->twig->render($template,[ 
             'vars' => $this->toArray(),
             'classes' => [$labelClasses, $inputClasses]
         ]);

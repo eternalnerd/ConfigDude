@@ -10,12 +10,18 @@ class Section
     private $name;
     private $prettyName;
     private $repeatable = false;
+    private $twig;
 
     public function __construct(array $array)
     {
         $this->prettyName = array_shift($array);
         $this->name = Helper::toCamelCase($this->prettyName);
         
+        $loader = new \Twig\Loader\FilesystemLoader(['templates','../vendor/eternalnerd/config-dude/templates']);
+        $this->twig = new \Twig\Environment($loader, [
+            'cache' => 'templates/cache',
+        ]);
+
         foreach($array as $item)
         {
             switch(true)
@@ -87,22 +93,12 @@ class Section
 
     public function renderHTMLEnd() :string
     {
-        $loader = new \Twig\Loader\FilesystemLoader(['templates','../vendor/eternalnerd/config-dude/templates']);
-        $twig = new \Twig\Environment($loader, [
-            'cache' => 'templates/cache',
-        ]);
-
-        return (!empty($this->children)) ? $twig->render('sectionEnd.html') : '' ;
+        return (!empty($this->children)) ? $this->twig->render('sectionEnd.html') : '' ;
     }
 
     public function renderHTMLStart(array $sectionClasses = []) :string
     {
-        $loader = new \Twig\Loader\FilesystemLoader('templates');
-        $twig = new \Twig\Environment($loader, [
-            'cache' => 'templates/cache',
-        ]);
-        
-        return (!empty($this->children)) ? $twig->render('sectionStart.html', [
+        return (!empty($this->children)) ? $this->twig->render('sectionStart.html', [
             'vars' => $this->toArray(),
             'classes' => $sectionClasses
         ]) : '' ;
