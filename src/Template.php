@@ -29,7 +29,7 @@ class Template
     {
         return <<<EOF
         <label {% if classes.labelClasses %}class="{%for item in classes.labelClasses %}{{item}} {%endfor%}"{%endif%} for="{{vars.name}}">{{vars.prettyName}}
-            <input {% if classes.inputClasses %}class="{%for item in classes.inputClasses %}{{item}} {%endfor%}"{%endif%} type="text" name="{{vars.name}}" id="{{vars.name}}" value="{{vars.defaultValue}}" min="{{vars.min}}" max="{{vars.max}}">
+            <input {% if classes.inputClasses %}class="{%for item in classes.inputClasses %}{{item}} {%endfor%}"{%endif%} type="number" name="{{vars.name}}" id="{{vars.name}}" value="{{vars.defaultValue}}" min="{{vars.min}}" max="{{vars.max}}">
         </label>
         EOF.PHP_EOL;
     }
