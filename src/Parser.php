@@ -152,9 +152,9 @@ class Parser
 
     public function getJsonValues() :iterable
     {
-        if(!empty($this->jsonFile))
+        if(!empty($this->jsonTokenArray))
         {
-            foreach($this->jsonFile as $key => $val)
+            foreach($this->jsonTokenArray as $key => $val)
             {
                 $out[$key] = $val;
             }
@@ -172,19 +172,19 @@ class Parser
         return $this->sections;
     }
 
-    public function loadJsonFromString(string $jsonString) :bool
+    public function loadJsonTokenArrayString(string $jsonString) :bool
     {
-        return $this->jsonFile = json_decode($jsonString);
+        return $this->jsonTokenArray = json_decode($jsonString);
     }
 
-    public function loadJsonFromFile(string $fileName) :bool
+    public function loadJsonTokenArrayFile(string $fileName) :bool
     {
         if(!file_exists($fileName))
         {
             throw new InvalidArgumentException("Chosen json file does not exist.");
         }
-        
-        return $this->jsonFile = json_decode(file_get_contents($fileName));
+
+        return $this->jsonTokenArray = json_decode(file_get_contents($fileName));
     }
 
     public function renderHTML(array $sectionClasses = [], array $labelClasses = [] , array $inputClasses = []) :string|bool
