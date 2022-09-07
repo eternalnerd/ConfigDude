@@ -5,13 +5,14 @@ namespace EternalNerd\ConfigDude;
 class Section
 {
     private $children = [];
+    private $lines = [];
     private $min;
     private $max;
     private $name;
     private $prettyName;
     private $repeatable = false;
     private $twig;
-    
+
 
     public function __construct(array $array)
     {
@@ -52,6 +53,11 @@ class Section
         return array_push($this->children, $child);
     }
 
+    public function addLine($line) :bool
+    {
+        return array_push($this->lines, $line);
+    }
+
     public function childExists($childName): bool
     {
         if(empty($this->children))
@@ -72,6 +78,11 @@ class Section
     public function getChildren() :iterable
     {
         return $this->children;
+    }
+
+    public function getLines() :iterable
+    {
+        return $this->lines;
     }
 
     public function getName() :string
@@ -106,6 +117,46 @@ class Section
             'classes' => $sectionClasses,
             'instance' => $instance
         ]) : '' ;
+    }
+
+    public function renderReplacedLines($values, $iterator = '')
+    {
+        foreach($this->getLines() as $line)
+        {
+            $outLine = $line;
+            //Collect our matched tokens
+            preg_match('/{{#(?:[^\/]).*?#}}/', $line, $sectionHeader);
+            preg_match('/{{#(?:[\/]).*?#}}/', $line, $sectionFooter);
+            preg_match_all('/{{.*?}}/', $line, $rawTokens);
+
+            if(!empty($sectionHeader))
+            {
+                continue;
+            }
+
+            if(!empty($sectionFooter))
+            {
+                continue;
+            }
+
+            if(!empty($rawTokens))
+            {
+                foreach($rawTokens[0] as $token){
+                    if(strpos($token, "#") === false) 
+                        {
+                            //Clear Cruft
+                            $tokenString = preg_replace(['/{{/','/}}/'], ['','',''],$token);
+
+                            //Explode segments to array
+                            $tokenArray = explode("|", $tokenString);
+                            $value = (empty($iterator)) ? $values[Helper::toCamelCase($tokenArray[0])] : $values[Helper::toCamelCase($tokenArray[0]).'-'.$iterator];
+                            $outLine = preg_replace('/{{'.$tokenArray[0].'.*?}}/',$value,$outLine);
+                        }
+                }
+                $outLines[] = $outLine;
+            }
+        }
+        return $outLines;
     }
 
     function toArray() :array

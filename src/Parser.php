@@ -62,7 +62,8 @@ class Parser
                 $currentSection = new Section(["anonymous".$lineNumber]);
 
             }
-
+            //Cache full line
+            $currentSection->addLine($fileLine);
             //Process tokens
             if(!empty($rawTokens))
             {
@@ -86,14 +87,79 @@ class Parser
         }
     }
 
-    public function getJsonSections() :string
+    public function buildOutputFile($outputFile) :bool
     {
-        return json_encode($this->sections);
+        
+        if(!$file = fopen($outputFile,'w+'))
+        {
+            throw new \Exception("Unable to open file for writing.");
+        }
+
+        foreach($this->buildOutputLines() as $line)
+        {
+            if(fwrite($file, $line) === false)
+            {
+                throw new \Exception("Unable to write line to file.");
+            }
+        }
+        fclose($file);
+    
+        return true;
     }
 
-    public function getJsonLines() :string
+    public function buildOutputLines() :array
     {
-        return json_encode($this->lines);
+        $repeatSectionLines = [];
+        $singleSectionLines = [];
+        // Iterate sections to get lines
+        foreach($this->getSections() as $section)
+        {
+            // If this is a repeatable section, do the replace operation on each line
+            if($section->getRepeatable())
+            {
+                for($x = 1; $x <= $section->getMax(); $x++)
+                {
+                    $repeatSectionLines[$x][] = $section->renderReplacedLines($this->getJsonValues(), $x);
+                }
+            }
+            //If not, just do it on this section and move on.
+            else
+            {
+                $singleSectionLines[] = $section->renderReplacedLines($this->getJsonValues());
+            }
+
+            if(isset($repeatSectionLines))
+            {
+                foreach($repeatSectionLines as $block)
+                {
+                    foreach($block as $blockLine)
+                    {
+                        $singleSectionLines[] = $blockLine;
+                    }
+                }
+                unset($repeatSectionLines);
+            }
+        }
+        foreach($singleSectionLines as $section){
+            foreach($section as $line)
+            {
+                $finalOutputLines[] = $line;
+            }
+        }
+        
+        return $finalOutputLines;
+    }
+
+    public function getJsonValues() :iterable
+    {
+        if(!empty($this->jsonFile))
+        {
+            foreach($this->jsonFile as $key => $val)
+            {
+                $out[$key] = $val;
+            }
+            return $out;
+        }
     }
 
     public function getLines() :iterable
@@ -104,6 +170,19 @@ class Parser
     public function getSections() :iterable
     {
         return $this->sections;
+    }
+
+    public function loadJsonFromFile(string $fileName) :bool
+    {
+        if(!file_exists($fileName))
+        {
+            throw new InvalidArgumentException("Chosen json file does not exist.");
+        }
+
+        
+        $this->jsonFile = json_decode(file_get_contents($fileName));
+        
+        return true;
     }
 
     public function renderHTML(array $sectionClasses = [], array $labelClasses = [] , array $inputClasses = []) :string|bool
@@ -136,5 +215,15 @@ class Parser
             }
         }
         return (!empty($outputHTML))? $outputHTML : false ;
+    }
+
+    public function renderJsonSections() :string
+    {
+        return json_encode($this->sections);
+    }
+
+    public function renderJsonLines() :string
+    {
+        return json_encode($this->lines);
     }
 }
