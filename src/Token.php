@@ -125,6 +125,11 @@ class Token
         ]);
     }
 
+    public function setName($newName) :void
+    {
+        $this->name = $newName;
+    }
+
     public function toArray() :array
     {
         foreach($this as $key => $val)

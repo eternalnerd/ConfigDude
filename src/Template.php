@@ -87,7 +87,7 @@ class Template
         <section {% if classes %}class="{%for item in classes %}{{item}} {%endfor%}"{%endif%}>
         {% else %}
         <section {% if classes %}class="{%for item in classes %}{{item}} {%endfor%}"{%endif%}>
-            <h3>{{vars.prettyName}}</h3>
+            <h3>{{vars.prettyName}}{% if instance %} x{{instance}}{% endif %}</h3>
         {% endif %}
         EOF.PHP_EOL;
     }

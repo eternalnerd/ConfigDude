@@ -111,13 +111,29 @@ class Parser
         $outputHTML = '';
         foreach($this->getSections() as $section)
         {
-            $outputHTML .= $section->renderHTMLStart($sectionClasses);
-            foreach($section->getChildren() as $child)
+            if($section->getRepeatable() && !empty($section->getMax()))
             {
-                $outputHTML .= $child->renderHTML($labelClasses, $inputClasses);
-                //echo "\t",($child->getDefault()) ? $child->getDefault() : "No default value","",PHP_EOL;
+                for($x = 1; $x <= $section->getMax(); $x++)
+                {
+                    $outputHTML .= $section->renderHTMLStart($sectionClasses, $x);
+                    foreach($section->getChildren() as $child)
+                    {
+                        $newChild = clone $child;
+                        $newChild->setName($child->getName()."-".$x);
+                        $outputHTML .= $newChild->renderHTML($labelClasses, $inputClasses);
+                    }
+                    $outputHTML .= $section->renderHTMLEnd();
+                }
             }
-            $outputHTML .= $section->renderHTMLEnd();
+            else
+            {
+                $outputHTML .= $section->renderHTMLStart($sectionClasses);
+                foreach($section->getChildren() as $child)
+                {
+                    $outputHTML .= $child->renderHTML($labelClasses, $inputClasses);
+                }
+                $outputHTML .= $section->renderHTMLEnd();
+            }
         }
         return (!empty($outputHTML))? $outputHTML : false ;
     }

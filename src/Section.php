@@ -99,11 +99,12 @@ class Section
         return (!empty($this->children)) ? $this->twig->render('sectionEnd') : '' ;
     }
 
-    public function renderHTMLStart(array $sectionClasses = []) :string
+    public function renderHTMLStart(array $sectionClasses = [], int $instance = null) :string
     {
         return (!empty($this->children)) ? $this->twig->render('sectionStart', [
             'vars' => $this->toArray(),
-            'classes' => $sectionClasses
+            'classes' => $sectionClasses,
+            'instance' => $instance
         ]) : '' ;
     }
 
