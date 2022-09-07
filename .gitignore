@@ -1,6 +1,9 @@
 composer.phar
 config.file
 test.file
+test.json
+test.php
+testoutput.file
 .phpunit.result.cache
 /vendor/
 templates/cache/*
