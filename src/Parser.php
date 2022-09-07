@@ -172,17 +172,19 @@ class Parser
         return $this->sections;
     }
 
+    public function loadJsonFromString(string $jsonString) :bool
+    {
+        return $this->jsonFile = json_decode($jsonString);
+    }
+
     public function loadJsonFromFile(string $fileName) :bool
     {
         if(!file_exists($fileName))
         {
             throw new InvalidArgumentException("Chosen json file does not exist.");
         }
-
         
-        $this->jsonFile = json_decode(file_get_contents($fileName));
-        
-        return true;
+        return $this->jsonFile = json_decode(file_get_contents($fileName));
     }
 
     public function renderHTML(array $sectionClasses = [], array $labelClasses = [] , array $inputClasses = []) :string|bool
