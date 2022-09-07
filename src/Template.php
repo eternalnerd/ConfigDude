@@ -101,9 +101,7 @@ class Template
     {
         return <<<EOF
         <label {% if classes.labelClasses %}class="{%for item in classes.labelClasses %}{{item}} {%endfor%}"{%endif%} for="{{vars.name}}">
-            <textarea {% if classes.inputClasses %}class="{%for item in classes.inputClasses %}{{item}} {%endfor%}"{%endif%} name="{{vars.name}}" id="{{vars.name}}">
-                {{vars.defaultValue}}
-            </textarea>
+            <textarea {% if classes.inputClasses %}class="{%for item in classes.inputClasses %}{{item}} {%endfor%}"{%endif%} name="{{vars.name}}" id="{{vars.name}}">{{vars.defaultValue}}</textarea>
         </label>
         EOF.PHP_EOL;
     }
